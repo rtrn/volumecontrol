@@ -6,24 +6,20 @@
 
 	var dB = 0;
 
-	function connectOutput(audioCtx, gainNode, element) {
-		audioCtx.createMediaElementSource(element).connect(gainNode);
-		gainNode.connect(audioCtx.destination);
-	}
-
-	var videoElement = document.querySelector("video");
-	var audioElement = document.querySelector("audio");
-	if (videoElement == null && audioElement == null) {
+	var videoElements = document.querySelectorAll("video");
+	var audioElements = document.querySelectorAll("audio");
+	if (videoElements.length == 0 && audioElements.length == 0) {
 		return;
 	}
 	var audioCtx = new AudioContext();
 	var gainNode = audioCtx.createGain();
-	if (videoElement != null) {
-		connectOutput(audioCtx, gainNode, videoElement);
+
+	function connectOutput(element) {
+		audioCtx.createMediaElementSource(element).connect(gainNode);
+		gainNode.connect(audioCtx.destination);
 	}
-	if (audioElement != null) {
-		connectOutput(audioCtx, gainNode, audioElement);
-	}
+	videoElements.forEach(connectOutput);
+	audioElements.forEach(connectOutput);
 
 	function setVolume(dB) {
 		gainNode.gain.value = Math.pow(10, dB/20);
