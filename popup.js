@@ -6,11 +6,11 @@ function listenForEvents() {
 	function setSlider(dB) {
 		document.querySelector("#volume-slider").value = dB;
 		var text = document.querySelector("#volume-text");
-		text.innerHTML = "";
+		text.textContent = "";
 		if (dB >= 0) {
-			text.innerHTML = "+";
+			text.textContent = "+";
 		}
-		text.innerHTML += dB + " dB";
+		text.textContent += dB + " dB";
 	}
 
 	function getVolume(tabs) {
