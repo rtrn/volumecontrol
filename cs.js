@@ -5,6 +5,7 @@
 	window.hasRun = true;
 
 	var dB = 0;
+	var mono = false;
 
 	var videoElements = document.querySelectorAll("video");
 	var audioElements = document.querySelectorAll("audio");
@@ -27,11 +28,13 @@
 	}
 
 	function enableMono() {
+		mono = true;
 		gainNode.channelCountMode = 'explicit';
 		gainNode.channelCount = 1;
 	}
 
 	function disableMono() {
+		mono = false;
 		gainNode.channelCountMode = 'max';
 		gainNode.channelCount = 2;
 	}
@@ -51,6 +54,10 @@
 			} else {
 				disableMono();
 			}
+			break;
+		case "getMono":
+			return Promise.resolve({response: mono});
+			break;
 		}
 	});
 })();

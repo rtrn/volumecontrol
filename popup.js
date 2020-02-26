@@ -16,11 +16,9 @@ function listenForEvents() {
 	function getVolume(tabs) {
 		browser.tabs.sendMessage(tabs[0].id, {
 			command: "getVolume"
-		})
-			.then((message) => {
+		}).then((message) => {
 				setSlider(message.response);
-			})
-			.catch(err);
+		}).catch(err);
 	}
 	browser.tabs.query({active:true, currentWindow:true})
 		.then(getVolume)
@@ -41,6 +39,17 @@ function listenForEvents() {
 				.catch(err);
 		}
 	});
+
+	function getMono(tabs) {
+		browser.tabs.sendMessage(tabs[0].id, {
+			command: "getMono"
+		}).then((message) => {
+			document.querySelector("#mono-checkbox").checked = message.response;
+		}).catch(err);
+	}
+	browser.tabs.query({active:true, currentWindow:true})
+		.then(getMono)
+		.catch(err);
 
 	document.addEventListener("change", (e) => {
 		function sendMono(tabs) {
