@@ -41,6 +41,21 @@ function listenForEvents() {
 				.catch(err);
 		}
 	});
+
+	document.addEventListener("change", (e) => {
+		function sendMono(tabs) {
+			browser.tabs.sendMessage(tabs[0].id, {
+				command: "setMono",
+				mono: e.target.checked
+			});
+		}
+
+		if (e.target.id == "mono-checkbox") {
+			browser.tabs.query({active:true, currentWindow:true})
+				.then(sendMono)
+				.catch(err);
+		}
+	});
 }
 
 function showError(error) {

@@ -13,6 +13,7 @@
 	}
 	var audioCtx = new AudioContext();
 	var gainNode = audioCtx.createGain();
+	gainNode.channelInterpretation = 'speakers';
 
 	function connectOutput(element) {
 		audioCtx.createMediaElementSource(element).connect(gainNode);
@@ -25,12 +26,31 @@
 		gainNode.gain.value = Math.pow(10, dB/20);
 	}
 
+	function enableMono() {
+		gainNode.channelCountMode = 'explicit';
+		gainNode.channelCount = 1;
+	}
+
+	function disableMono() {
+		gainNode.channelCountMode = 'max';
+		gainNode.channelCount = 2;
+	}
+
 	browser.runtime.onMessage.addListener((message) => {
-		if (message.command == "setVolume") {
+		switch (message.command) {
+		case "setVolume":
 			dB = message.dB;
 			setVolume(dB);
-		} else if (message.command == "getVolume") {
+			break;
+		case "getVolume":
 			return Promise.resolve({response: dB});
+			break;
+		case "setMono":
+			if (message.mono) {
+				enableMono();
+			} else {
+				disableMono();
+			}
 		}
 	});
 })();
